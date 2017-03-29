@@ -1,0 +1,279 @@
+Installing ET++2.2
+******************
+This is the Installation Guide for ET++2.2.
+
+Send comments to:
+
+	Andre Weinand
+	Union Bank of Switzerland
+	UBILAB (Union Bank Informatics Laboratory)
+	Bahnhofstrasse 45
+	P.O.Box
+	CH-8021 Zurich
+	Switzerland
+
+	phone: +41-1-236-40-53
+	fax:   +41-1-236-46-71
+	e-mail: weinand@ifi.unizh.ch
+	
+0 Hardcopy Documentation
+------------------------
+
+The ET_DIR/doc directory includes:
+regex.txt:    a description of the regular expressions
+
+ET++.sit.hqx a binhexed StuffIt archive including:
+	ET++Intro: an introduction to ET++ (same as in ET++2.0)
+	ET++Paper: the paper "Design and Implementation of ET++
+both papers are Word 4.0 documents created on a Macintosh.
+
+If you do not have access to a Macintosh to print the above
+documents send us your SMAIL address and we will send you a hardcopy.
+
+
+1.      Installation
+--------------------
+The distribution is organized hierarchically as follows:
+
+et      
+	.cshrc  example profile (mandatory environment variables)
+	CSHRC   same as above
+	CHANGES*    change notes 
+	src     source code of ET++ class library
+		MALLOC  extended malloc
+		SUNWINDOW       interface for SunView/SunWindows
+		SERVER  a window server running under SunView
+                        (not supported in this release)
+		XSERVER interface for X11R4
+		NEWS    interface for the NeWS window system
+                        (not supported in this release)
+		PIC     interface for producing pic output (experimental)
+		POSTSCRIPT      interface for producing postscript output
+		SUNOS   interface for SUNOS (or other BSD based Unix systems)
+		PROGENV ET++'s programming environment
+		images  bitmap images
+	applications    example applications developed with ET++
+	postscript      postscript libraries
+	IO              stream classes
+	doc             compressed postscript files
+	fonts           fonts in bdf format
+	sunfonts        vfonts for SunWindow (initially empty)
+	xfonts          snf fonts for X11 (initially empty)
+	owfonts         fonts for OpenWindows 2.0 (initially empty)
+	bin             utility programs for ET++
+	dyn.sparc       *.o files for dynamic loading/linking with "app"
+                        (initially empty)
+	util    
+		makedepend      public domain makefile dependency generator
+		makemap         utility to extract informations about
+                                member functions in a source file
+
+B.      Hardware and Software Requirements
+------------------------------------------
+To read the ET++ tape requires about 10 MB of disk space. A full ET++ 
+installation requires about 40 MB of disk space. The following table 
+gives some numbers for the sizes of the directories after all the fonts 
+and example applications are compiled:
+
+src             8 MB
+sunfonts        1 MB
+xfonts          1.6 MB
+applications    25 MB
+
+Supported C++ Compilers:
+
+* AT&T C++ 2.0, SUN C++2.0:     
+ET++2.0 is 2.0 friendly but does neither use nor 
+support multiple inheritance!
+
+* g++1.37.1 (NEW!!)
+If g++ is used with ET++ do not use the libg++ version of malloc.
+An application using this malloc will immediately crash with
+"malloc/free/realloc: clobbered space detected". 
+To disable placeing the libg++ version of malloc in libg++.a
+build it with: 
+XTRAFLAGS = -DNO_LIBGXX_MALLOC
+
+Supported Hardware and OS:
+
+* Sun OS 4.x (680xx, Sparc), SunWindows, X11R4
+
+* Sony News 1850, X11R3
+
+The ET++ collection classes are window system independent and can be 
+used on all platforms.
+
+C.      Installation Procedure
+------------------------------
+The ET++ software is location independent, e.g. it can be installed at any 
+place in the file system. Choose the directory where ET++ should be 
+installed, for example /local. Extract the files:
+
+tar -xvfb /dev/rst0 126
+
+The standard location for ET++ is /local/et. If the standard location is not 
+used the environment variable ET_DIR has to be set accordingly. For 
+example, if ET++ is installed in /home/oolibs/et, ET_DIR has to be set to 
+/home/oolibs/et. The installation directory is referred to as ET_DIR in the 
+following explanations.
+
+1.      Configuring ET++ for your C++ Compiler
+All compiler dependencies of ET++ are located in the etCC script 
+stored in ET_DIR/bin. Adapt this script to your site specific C++ 
+installation. 
+At the end of this script the utility makemap is called. Makemap
+extracts information about member functions which is used by the
+source browser.
+Makemap generates an output file with the same name as the source file 
+and the suffix .map. The file is stored in a directory .MAP. If this 
+directory does not exist no map-files will be generated. Instead of using 
+map-files you can set the environment variable ET_NO_MAPFILES and 
+the source browser will extract the member functions on the fly (this 
+approach is slower than using map-files).
+
+If ET++ is compiled with g++ the LD macros in ET_DIR/makefile and
+ET_DIR/src/makefile have to be modified to refer to gnu-ld.
+
+2.      Configuring the ET++ library in /src/makefile
+The ET++ class library includes support for several different window systems 
+and printing devices. The makefile in ET_DIR/src includes in the section 
+entitled configuration some macros to tailor ET++ to a specific 
+environment.
+
+	Selecting the Window System Interfaces
+By default are the window system interfaces for SunView/SunWindows and X11
+included.
+
+WS_OFILES       =       $(XSERVER) $(SUNWINDOW)
+WS_IFDEFS       =       -DWS_X -DWS_SUNWINDOW
+WS_DIRS         =       SUN XSERVER
+
+To remove a window system interface, delete the corresponding entry 
+from these lines. The macro names stand for:
+
+XSERVER         interface for X11.4
+SUNWINDOW       interface for sunwindow/sunview
+
+The following example shows the definition of the macros for a version 
+of ET++ which includes only the X interface
+
+WS_OFILES       =       $(XSERVER)
+WS_IFDEFS       =       -DWS_X
+WS_DIRS         =       XSERVER
+
+	Selecting the Printers
+ET++ supports generating either postscript or pic output. By default both 
+formats are included. To remove a printer interface, adapt the macros as 
+described above.
+
+PR_OFILES       =       $(POSTSCRIPT) $(PIC)
+PR_IFDEFS       =       -DPR_POSTSCRIPT -DPR_PIC
+PR_DIRS         =       POSTSCRIPT PIC
+
+	Operating System Interface
+Currently, only an interface for SunOS4.* or similar BSD systems is 
+supported.
+
+	Programming Environment
+By default the ET++ library and therefore all the ET++ applications linked 
+with it include a programming environment (an inspector, and several browsers).
+These tools add 100KB to an ET++ application but have no 
+influence on the execution speed. In order to remove this inspecting and 
+browsing code in a final version of an application modify the macros as 
+shown below:
+
+PE_OFILES       =       # $(ET_PROGENV)
+PE_IFDEFS       =       # -DET_PROGENV
+PE_DIRS         =       # PROGENV
+
+Recompile the class library with make config and relink your 
+application. make config should be called whenever the PE_ or the WS_ 
+macros are changed.
+
+3.      Fonts
+-------------
+The ET++ distribution includes fonts for X11 and SunWindow in bdf
+format. By default the ET++ installation will generate binary versions
+of these fonts for sunwindow, X11 and OpenWindows. The compiled fonts
+are stored in:	
+
+sunfonts: 	fonts for sunwindow
+xfonts:		fonts for X11
+owfonts:	fonts for OpenWindows
+
+The binary versions of the fonts to be generated
+can be defined in ET_DIR/makefile.
+To avoid the creation of binary fonts for a specific window system
+remove the corresponding directory name from the DIRS macro:
+
+DIRS    = util src applications examples sunfonts xfonts owfonts.
+
+You should check whether the font compilers in ET_DIR/xfonts/Makefile
+and ET_DIR/owfonts/makefile match your local environment.
+
+If you are running ET++ applications under OpenWindows or
+X11 do not forget to set the font path with xset +fp ET_DIR/???fonts.
+
+5.      Build the ET++ Library and the Example Application "hello"
+------------------------------------------------------------------
+Executing make in ET_DIR will compile the ET++ library,
+the example application "hello" (ET_DIR/applications/hello), and
+the fonts. After this step you can check the installation by 
+executing the "hello" application in ET_DIR/applications/hello.
+
+The ET++ Library is not generated as an
+archive including the ET++ object files but as a relocatable object file with 
+the name et.o. Experience has shown that this approach speeds up 
+linking of an ET++ application. An ET++ application linked with an 
+archive is not significantly smaller than an application linked with a 
+relocatable object file containing all the object files.
+
+6.      Compile some of the ET++ Example Applications
+-----------------------------------------------------
+Now you are ready to build the ET++ example applications. They are 
+compiled by calling make in the directory ET_DIR/applications. More 
+information about these example applications can be found in "ET++ 
+Introduction".
+
+7.      Compiling ET++ Support Applications
+-------------------------------------------
+In order to support cut/copy/paste operations among different 
+application processes under SunWindow, a special clipboard server is 
+required. If the clipboard server is not running applications can only 
+execute cut/copy/paste operations between their own windows. Make 
+clipboard in ET_DIR/src/SUNWINDOW compiles the SunWindow clipboard server.
+The clipboard is started by calling clipboard.
+
+The application app generated with make app starts up any ET++ 
+application and dynamically links the missing classes for this 
+application. App is called with the name of the application as argument, 
+e.g. app micky, after dynamically linking all the classes required by this 
+application micky will start up as usual. The search path to be used to 
+find object files can be set in the environment variable ET_DYN_PATH. 
+
+    Notice: app is (still) not completely finished yet. 
+	    We are waiting for better
+	    support for dynamic C++ loading and linking from the operating
+	    system.  The command make install moves these additional
+	    applications to /bin. (Not tested with g++).
+
+10.     Misc
+------------
+
+	Streams
+In order to be independent from the stream-classes provided with C++ 
+compilers ET++ includes in the directory ET_DIR/src/IO its own 
+implementation of stream classes. This classes are modeled after the 
+stream classes of AT&T cfront 1.2.
+
+	Environment Variables
+The following environment variables control the behaviour of ET++:
+
+ET_DIR                  The root directory for ET++ files.
+ET_FONT_SIZE            The default font size
+ET_SRC_PATH             The directories to search for source code.
+ET_DYN_PATH             The directories to search for object files.
+ET_NO_STYLEDCODE        Set to prevent pretty-printing of source code.
+ET_NO_MAPFILES          Do not use map-files
+ET_DISPLAY              For the SunWindow server system.
+

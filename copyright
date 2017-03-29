@@ -1,0 +1,27 @@
+
+*******************************************************************************
+
+Copyright (C) 1990 by Union Bank of Switzerland (UBS)
+
+Permission to use, copy, modify and distribute this software and its
+documentation for any purpose and without fee, except redistribution costs, is
+hereby granted, provided that (1) the above copyright notice appears in all
+copies and (2) both that copyright-notice and this permission-notice appear in
+supporting documentation and (3) the name of Union Bank of Switzerland (UBS) is
+not used in advertising or publicity pertaining to distribution of the software
+without specific and written prior permission of UBS.
+
+The Software is provided "as is". UBS disclaimes all warranties, express or
+implied, including but not limited to warranties of suitability,
+merchantability and fitness for any purpose. In no event UBS shall be
+responsible for any loss of use, data or profit or for any other special,
+indirect, incidential or consequential damages, neither in an action of
+contract nor in an action of tort, arising out of or in connection with the use
+or performance of this software.
+
+An exception to this are the files "src/regex.h" and "src/regex.c" which are
+Copyright (C) 1985 Free Software Foundation Inc., 675 Mass AVE, Cambridge, 
+MA 02139, USA. See these files for the terms and conditions governing the use of
+these files.
+
+*******************************************************************************

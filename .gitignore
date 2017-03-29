@@ -1,0 +1,13 @@
+/**
+!/**/
+!*.h
+!*.H
+!*.hh
+!*.c
+!*.C
+!makefile
+!Makefile
+!INSTALL
+!README
+!copyright
+!.gitignore

@@ -1,0 +1,12 @@
+etCC: ET++ specific C++ compiler
+
+etld: ET++ specific C++ linker
+
+etmakedep: ET++ specific script for calling makedep
+
+etmakehier: script for generating an ascii description of a class hierarchy
+
+cpp:  C++ specific replacement for second call of c-preprocessor converts 
+	"# line n" to "# n"
+      and mangeled name
+	"_au0___builtin_va_alist" to its original form "__builtin_va_alist"
